@@ -2,7 +2,6 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import {
   ArrowLeftRight, Download, History, ImagePlus, Layers, Loader2, Pause, Play, Plus, SlidersHorizontal, Trash2, X,
 } from 'lucide-react'
-import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle } from '@/components/ui/sheet'
 import { Slider } from '@/components/ui/slider'
 import { Input } from '@/components/ui/input'
 import { TooltipProvider } from '@/components/ui/tooltip'
@@ -16,6 +15,10 @@ import { encode, loadFFmpeg } from '@/lib/encode'
 import { useStored } from '@/hooks/useStored'
 import { usePlayer } from '@/hooks/usePlayer'
 import { Splash } from '@/components/shell/Splash'
+import { PanelRail } from '@/components/shell/PanelRail'
+import { PanelSheet } from '@/components/shell/PanelSheet'
+import { ActionDock } from '@/components/shell/ActionDock'
+import { PANEL_W, PHONE_SHEET, SAFE_BOTTOM, usePhone } from '@/components/shell/layout'
 import { cn } from '@/lib/utils'
 
 const panels = [
@@ -61,6 +64,7 @@ function download(url: string, name: string) {
 export default function App() {
   const [frames, setFrames] = useState<Frame[]>([])
   const [panel, setPanel] = useState<PanelId | null>(null)
+  const phone = usePhone()
   const [exports, setExports] = useState<Export[]>([])
   const [status, setStatus] = useState('')
   const [error, setError] = useState('')
@@ -177,7 +181,11 @@ export default function App() {
           }}
         />
 
-        <main className={cn('absolute inset-0 grid place-items-center p-6 pb-24 transition-[right] duration-200', panel && 'sm:right-[300px]')}>
+        <main
+          className="absolute inset-0 grid place-items-center p-6 transition-[right,bottom] duration-200"
+          // Room for whatever sits over the preview: the side panel on desktop, the bars or the bottom panel on phones
+          style={phone ? { bottom: panel ? `${PHONE_SHEET * 100}dvh` : `calc(${SAFE_BOTTOM} + 116px)` } : { right: panel ? PANEL_W : 0, paddingBottom: 96 }}
+        >
           {empty ? (
             <button
               type="button"
@@ -202,27 +210,9 @@ export default function App() {
         )}
       </div>
 
-      <nav
-        aria-label="Panels"
-        className={cn('panel fixed top-3 right-3 z-60 flex flex-col gap-1 rounded-full p-1 transition-[right] duration-200', panel && 'sm:right-[calc(300px+0.75rem)]')}
-      >
-        {panels.map(p => (
-          <ToolButton key={p.id} icon={p.icon} label={p.label} active={panel === p.id} onClick={() => setPanel(panel === p.id ? null : p.id)} />
-        ))}
-      </nav>
+      <PanelRail panels={panels} open={panel} onToggle={id => setPanel(panel === id ? null : id)} phone={phone} />
 
-      <Sheet open={panel !== null} onOpenChange={open => !open && setPanel(null)} modal={false}>
-        <SheetContent
-          side="right"
-          className="panel gap-0 data-[side=right]:w-[min(300px,86vw)] data-[side=right]:sm:max-w-[300px]"
-          onInteractOutside={e => e.preventDefault()}
-        >
-          <SheetHeader>
-            <SheetTitle>{current?.label}</SheetTitle>
-            <SheetDescription className="sr-only">{current?.label}</SheetDescription>
-          </SheetHeader>
-
-          <div className="flex flex-col gap-6 overflow-y-auto px-4 pb-6">
+      <PanelSheet open={panel !== null} title={current?.label} onClose={() => setPanel(null)} phone={phone}>
             {panel === 'frames' && (
               <>
                 <div className="flex items-center justify-between">
@@ -343,17 +333,15 @@ export default function App() {
                   ))}
                 </ul>
               ))}
-          </div>
-        </SheetContent>
-      </Sheet>
+      </PanelSheet>
 
-      <div className={cn('pointer-events-none fixed inset-x-0 bottom-4 flex flex-col items-center gap-2 transition-[right] duration-200', panel && 'sm:right-[300px]')}>
+      <ActionDock phone={phone} panelOpen={panel !== null}>
         {(error || encoding) && (
           <p role="status" className={cn('panel rounded-full px-3 py-1 text-xs', error ? 'text-destructive' : 'text-muted-foreground')}>
             {error || status}
           </p>
         )}
-        <Toolbar aria-label="Playback" className="pointer-events-auto">
+        <Toolbar aria-label="Playback">
           <ToolButton icon={playing ? Pause : Play} label={playing ? 'Pause' : 'Play'} side="top" disabled={empty} onClick={() => setPlaying(!playing)} />
           <span className="min-w-12 px-1 text-center text-xs text-muted-foreground tabular-nums">
             {empty ? '0 / 0' : `${index + 1} / ${frames.length}`}
@@ -369,7 +357,7 @@ export default function App() {
             onClick={runExport}
           />
         </Toolbar>
-      </div>
+      </ActionDock>
     </TooltipProvider>
   )
 }
