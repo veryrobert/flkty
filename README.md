@@ -2,6 +2,8 @@
 
 Turns images and PDF pages into a looping slideshow, then exports it as MP4 or GIF, entirely in the browser.
 
+![flkty](docs/screenshot.png)
+
 - Drop images or PDFs anywhere; PDFs are split into one frame per page.
 - Set the time per frame, a transition (fade, slide, wipe, circle), the aspect ratio or a custom crop.
 - The preview matches the export: transitions are drawn on canvas and encoded with ffmpeg's `xfade`.
