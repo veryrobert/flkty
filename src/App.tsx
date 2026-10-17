@@ -148,11 +148,9 @@ export default function App() {
   return (
     <TooltipProvider delayDuration={400}>
       <Splash label="Loading flkty">
-        <path pathLength={1} d="M12 10V7h15v13h-3" />
-        <path pathLength={1} d="M9 13v-3h15v13h-3" />
-        <path pathLength={1} d="M6 13h15v13H6z" />
-        <path pathLength={1} d="M6 23l4.5-4.5 3.5 3.5 2-2 5 5" />
-        <path pathLength={1} d="M18.2 16.5a1.2 1.2 0 1 1-2.4 0a1.2 1.2 0 1 1 2.4 0" />
+        <path pathLength={1} d="M12 9V6h14v14h-3" />
+        <path pathLength={1} d="M9 12V9h14v14h-3" />
+        <path pathLength={1} d="M6 12h14v14H6z" />
       </Splash>
       <div
         className="fixed inset-0"
