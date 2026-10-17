@@ -15,6 +15,7 @@ import { outputSize, type Format, type Ratio, type Settings, type Transition } f
 import { encode, loadFFmpeg } from '@/lib/encode'
 import { useStored } from '@/hooks/useStored'
 import { usePlayer } from '@/hooks/usePlayer'
+import { Splash } from '@/components/shell/Splash'
 import { cn } from '@/lib/utils'
 
 const panels = [
@@ -146,6 +147,13 @@ export default function App() {
 
   return (
     <TooltipProvider delayDuration={400}>
+      <Splash label="Loading flkty">
+        <path pathLength={1} d="M12 10V7h15v13h-3" />
+        <path pathLength={1} d="M9 13v-3h15v13h-3" />
+        <path pathLength={1} d="M6 13h15v13H6z" />
+        <path pathLength={1} d="M6 23l4.5-4.5 3.5 3.5 2-2 5 5" />
+        <path pathLength={1} d="M18.2 16.5a1.2 1.2 0 1 1-2.4 0a1.2 1.2 0 1 1 2.4 0" />
+      </Splash>
       <div
         className="fixed inset-0"
         onDragOver={e => {
