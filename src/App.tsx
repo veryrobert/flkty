@@ -18,6 +18,8 @@ import { PanelSheet } from '@/components/shell/PanelSheet'
 import { ActionDock } from '@/components/shell/ActionDock'
 import { PANEL_W, PHONE_SHEET, SAFE_BOTTOM, usePhone } from '@/components/shell/layout'
 import { cn } from '@/lib/utils'
+import { Button } from '@/components/ui/button'
+import { thumbnail } from '@/components/shell/thumbnail'
 
 const panels = [
   { id: 'frames', label: 'Frames', icon: Layers },
@@ -311,6 +313,11 @@ export default function App() {
                   <Field label="File">
                     <Segmented label="File" value={format} onChange={setFormat} options={[{ value: 'mp4', label: 'MP4' }, { value: 'gif', label: 'GIF' }]} />
                   </Field>
+                  {/* The index thumbnail: 16:10, the first frame centred on black (shell/thumbnail.ts) */}
+                  <Button variant="secondary" disabled={!frames.length}
+                    onClick={async () => { const b = await thumbnail(frames[0].el); download(URL.createObjectURL(b), 'flkty-thumbnail.png') }}>
+                    Save thumbnail
+                  </Button>
                 </FieldGroup>
               </>
             )}
