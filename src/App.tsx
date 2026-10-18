@@ -1,7 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import {
-  ArrowLeftRight, Download, History, ImagePlus, Layers, Loader2, Pause, Play, Plus, SlidersHorizontal, Trash2, X,
-} from 'lucide-react'
+import { ArrowLeftRight, Download, ImagePlus, Layers, Library, Loader2, Pause, Play, Plus, SlidersHorizontal, Trash2, X } from 'lucide-react'
 import { Slider } from '@/components/ui/slider'
 import { Input } from '@/components/ui/input'
 import { TooltipProvider } from '@/components/ui/tooltip'
@@ -23,8 +21,8 @@ import { cn } from '@/lib/utils'
 
 const panels = [
   { id: 'frames', label: 'Frames', icon: Layers },
+  { id: 'exports', label: 'Library', icon: Library }, // past exports, as Library in the other apps
   { id: 'settings', label: 'Settings', icon: SlidersHorizontal },
-  { id: 'exports', label: 'Exports', icon: History },
 ] as const
 type PanelId = (typeof panels)[number]['id']
 
@@ -281,8 +279,8 @@ export default function App() {
                   </Field>
                 </FieldGroup>
                 <FieldGroup title="Size">
-                  <Field label="Ratio">
-                    <Segmented label="Ratio" value={ratio} onChange={setRatio} options={ratioOptions} />
+                  <Field label="Format">
+                    <Segmented label="Format" value={ratio} onChange={setRatio} options={ratioOptions} />
                   </Field>
                   {ratio === 'original' && (
                     <Field label="Crop">
@@ -310,8 +308,8 @@ export default function App() {
                   <p className="text-xs text-muted-foreground tabular-nums">{size.width} × {size.height}</p>
                 </FieldGroup>
                 <FieldGroup title="Export">
-                  <Field label="Format">
-                    <Segmented label="Format" value={format} onChange={setFormat} options={[{ value: 'mp4', label: 'MP4' }, { value: 'gif', label: 'GIF' }]} />
+                  <Field label="File">
+                    <Segmented label="File" value={format} onChange={setFormat} options={[{ value: 'mp4', label: 'MP4' }, { value: 'gif', label: 'GIF' }]} />
                   </Field>
                 </FieldGroup>
               </>
