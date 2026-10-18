@@ -184,7 +184,7 @@ export default function App() {
         <main
           className="absolute inset-0 grid place-items-center p-6 transition-[right,bottom] duration-200"
           // Room for whatever sits over the preview: the side panel on desktop, the bars or the bottom panel on phones
-          style={phone ? { bottom: panel ? `${PHONE_SHEET * 100}dvh` : `calc(${SAFE_BOTTOM} + 68px)`, right: 60 } : { right: panel ? PANEL_W : 0, paddingBottom: 96 }}
+          style={phone ? { bottom: panel ? `${PHONE_SHEET * 100}dvh` : `calc(${SAFE_BOTTOM} + 68px)`, top: 'calc(env(safe-area-inset-top, 0px) + 48px)' } : { right: panel ? PANEL_W : 0, paddingBottom: 96 }}
         >
           {empty ? (
             <button
